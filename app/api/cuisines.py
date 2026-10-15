@@ -11,7 +11,6 @@ from app.schemas.cuisine import CuisineCreate, CuisineRead, CuisineUpdate
 router = APIRouter(prefix="/cuisines", tags=["cuisines"])
 
 
-# Создаёт кухню
 @router.post("/", response_model=CuisineRead, status_code=201)
 def create_cuisine(
     data: CuisineCreate,
@@ -20,13 +19,10 @@ def create_cuisine(
     return service.create(data)
 
 
-# Возвращает все кухни
 @router.get("/", response_model=List[CuisineRead])
 def list_cuisines(service: CuisineService = Depends(get_cuisine_service)):
     return service.get_all()
 
-
-# Возвращает кухню по ID
 @router.get("/{cuisine_id}", response_model=CuisineRead)
 def get_cuisine(
     cuisine_id: int,
@@ -37,8 +33,6 @@ def get_cuisine(
         raise HTTPException(status_code=404, detail="Кухня не найдена")
     return cuisine
 
-
-# Обновляет кухню
 @router.put("/{cuisine_id}", response_model=CuisineRead)
 def update_cuisine(
     cuisine_id: int,
@@ -50,8 +44,6 @@ def update_cuisine(
         raise HTTPException(status_code=404, detail="Кухня не найдена")
     return cuisine
 
-
-# Удаляет кухню
 @router.delete("/{cuisine_id}", status_code=204)
 def delete_cuisine(
     cuisine_id: int,

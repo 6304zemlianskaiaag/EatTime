@@ -11,27 +11,19 @@ from app.models import User
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
 
-
-# Создаёт уведомление
 @router.post("/", response_model=NotificationRead, status_code=201)
-def create_notification(
-    data: NotificationCreate,
+def create_notification(data: NotificationCreate,
     service: NotificationService = Depends(get_notification_service),
 ):
     return service.create(data)
 
-
-# Уведомления текущего пользователя
 @router.get("/", response_model=List[NotificationRead])
 def list_my_notifications(
     only_unread: bool = False,
     service: NotificationService = Depends(get_notification_service),
-    current_user: User = Depends(get_current_user),
-):
+    current_user: User = Depends(get_current_user),):
     return service.get_by_user(current_user.id, only_unread)
 
-
-# Уведомление по ID
 @router.get("/{notification_id}", response_model=NotificationRead)
 def get_notification(
     notification_id: int,
@@ -42,8 +34,6 @@ def get_notification(
         raise HTTPException(status_code=404, detail="Уведомление не найдено")
     return notification
 
-
-# Отметить прочитанным
 @router.patch("/{notification_id}/read", response_model=NotificationRead)
 def mark_read(
     notification_id: int,
@@ -54,8 +44,6 @@ def mark_read(
         raise HTTPException(status_code=404, detail="Уведомление не найдено")
     return notification
 
-
-# Удалить
 @router.delete("/{notification_id}", status_code=204)
 def delete_notification(
     notification_id: int,

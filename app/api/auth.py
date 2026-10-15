@@ -10,23 +10,16 @@ from app.schemas.user import UserCreate, UserRead
 from app.schemas.auth import Token
 from app.security import verify_password, create_access_token
 
-# Роутер с префиксом /auth и тегом auth
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-
-# Регистрация нового пользователя
 @router.post("/register", response_model=UserRead, status_code=201)
-def register(
-    data: UserCreate,
-    service: UserService = Depends(get_user_service),
-):
+def register(data: UserCreate, service: UserService = Depends(get_user_service),):
     try:
         return service.register(data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-# Логин: проверяет email и пароль, возвращает JWT-токен
+
 @router.post("/login", response_model=Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -38,5 +31,5 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный email или пароль",
         )
-    token = create_access_token({"sub": str(user.id)})
-    return {"access_token": token, "token_type": "bearer"}
+    token = create_access_token({"sub": str(user.id), "log": str(user.email)})
+    return {"access_token": token, "token_type": "bearer", "log": str(user.email)}

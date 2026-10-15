@@ -13,20 +13,15 @@ from app.models import User
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
 
-# Создаёт бронь (только для авторизованных)
 @router.post("/", response_model=BookingRead, status_code=201)
-def create_booking(
-    data: BookingCreate,
-    service: BookingService = Depends(get_booking_service),
-    current_user: User = Depends(get_current_user),
-):
+def create_booking(data: BookingCreate, service: BookingService = Depends(get_booking_service),
+    current_user: User = Depends(get_current_user),):
     try:
         return service.create(current_user.id, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-# Возвращает брони текущего пользователя
 @router.get("/", response_model=List[BookingRead])
 def list_my_bookings(
     service: BookingService = Depends(get_booking_service),
@@ -35,7 +30,6 @@ def list_my_bookings(
     return service.get_by_user(current_user.id)
 
 
-# Альтернативные слоты — ДО /{booking_id}
 @router.get("/alternatives/{restaurant_id}")
 def find_alternatives(
     restaurant_id: int,
@@ -56,7 +50,7 @@ def find_alternatives(
     ]
 
 
-# Брони ресторана — ДО /{booking_id}
+# Брони ресторана
 @router.get("/restaurant/{restaurant_id}", response_model=List[BookingRead])
 def list_restaurant_bookings(
     restaurant_id: int,

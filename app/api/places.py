@@ -9,9 +9,6 @@ from app.services.place import PlaceService
 from app.schemas.place import PlaceCreate, PlaceRead, PlaceUpdate
 
 router = APIRouter(prefix="/places", tags=["places"])
-
-
-# Создаёт столик
 @router.post("/", response_model=PlaceRead, status_code=201)
 def create_place(
     data: PlaceCreate,
@@ -19,8 +16,6 @@ def create_place(
 ):
     return service.create(data)
 
-
-# Столики ресторана — ДО /{place_id}
 @router.get("/restaurant/{restaurant_id}", response_model=List[PlaceRead])
 def list_by_restaurant(
     restaurant_id: int,
@@ -41,8 +36,6 @@ def get_place(
         raise HTTPException(status_code=404, detail="Столик не найден")
     return place
 
-
-# Обновляет столик
 @router.put("/{place_id}", response_model=PlaceRead)
 def update_place(
     place_id: int,
@@ -54,8 +47,6 @@ def update_place(
         raise HTTPException(status_code=404, detail="Столик не найден")
     return place
 
-
-# Удаляет столик
 @router.delete("/{place_id}", status_code=204)
 def delete_place(
     place_id: int,

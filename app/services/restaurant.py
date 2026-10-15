@@ -12,28 +12,17 @@ class RestaurantService:
 
     def __init__(self, repo: RestaurantRepository):
         self.repo = repo
-
-    # Создаёт ресторан
     def create(self, data: RestaurantCreate) -> Restaurant:
         return self.repo.create(data)
-
-    # Возвращает по ID
     def get_by_id(self, restaurant_id: int) -> Optional[Restaurant]:
         return self.repo.get_by_id(restaurant_id)
-
-    # Возвращает все
     def get_all(self) -> List[Restaurant]:
         return self.repo.get_all()
-
-    # Поиск по кухне
     def search_by_cuisine(self, cuisine_name: str) -> List[Restaurant]:
         return self.repo.search_by_cuisine(cuisine_name)
-
-    # Обновляет
     def update(self, restaurant_id: int, data: RestaurantUpdate) -> Optional[Restaurant]:
         return self.repo.update(restaurant_id, data)
 
-    # Удаляет
     def delete(self, restaurant_id: int) -> bool:
         return self.repo.delete(restaurant_id)
 

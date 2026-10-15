@@ -18,8 +18,6 @@ from app.schemas.restaurant import (
 
 router = APIRouter(prefix="/restaurants", tags=["restaurants"])
 
-
-# Создаёт ресторан
 @router.post("/", response_model=RestaurantRead, status_code=201)
 def create_restaurant(
     data: RestaurantCreate,
@@ -27,14 +25,11 @@ def create_restaurant(
 ):
     return service.create(data)
 
-
-# Возвращает список всех ресторанов
 @router.get("/", response_model=List[RestaurantRead])
 def list_restaurants(service: RestaurantService = Depends(get_restaurant_service)):
     return service.get_all()
 
 
-# Поиск ресторанов по кухне
 @router.get("/search", response_model=List[RestaurantRead])
 def search_restaurants(
     cuisine: str,
@@ -42,8 +37,6 @@ def search_restaurants(
 ):
     return service.search_by_cuisine(cuisine)
 
-
-# Возвращает ресторан по ID
 @router.get("/{restaurant_id}", response_model=RestaurantRead)
 def get_restaurant(
     restaurant_id: int,

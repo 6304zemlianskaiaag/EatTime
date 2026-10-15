@@ -12,20 +12,20 @@ class UserBase(BaseModel):
     phone: Optional[str] = None
 
 
-# Схема для регистрации — содержит пароль
+# Схема для регистрации
 class UserCreate(UserBase):
     password: str = Field(min_length=8)
     role_id: int
 
 
-# Схема для обновления — все поля опциональны
+# Схема для обновления
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     phone: Optional[str] = None
 
 
-# Схема для ответа клиенту — без пароля
+# Схема для ответа клиенту
 class UserRead(UserBase):
     id: int
     is_active: bool
