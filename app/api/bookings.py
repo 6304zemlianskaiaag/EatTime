@@ -1,6 +1,6 @@
 # app/api/bookings.py
 # HTTP-роутер для бронирований
-
+from app.grpc_client.client import get_alternatives_via_grpc
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from datetime import datetime
@@ -36,18 +36,9 @@ def find_alternatives(
     start: datetime,
     end: datetime,
     guests: int,
-    service: BookingService = Depends(get_booking_service),
 ):
-    slots = service.find_alternative_slots(restaurant_id, start, end, guests)
-    return [
-        {
-            "place_id": place.id,
-            "seats": place.table_type.seats,
-            "start": s,
-            "end": e,
-        }
-        for place, s, e in slots
-    ]
+    slots = get_alternatives_via_grpc(restaurant_id, start, end, guests)
+    return {"count": len(slots), "slots": slots}
 
 
 # Брони ресторана
