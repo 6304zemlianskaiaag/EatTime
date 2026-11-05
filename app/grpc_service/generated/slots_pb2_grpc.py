@@ -37,10 +37,10 @@ class SlotFinderStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.FindAlternativeSlots = channel.unary_unary(
+        self.FindAlternativeSlots = channel.unary_stream(
                 '/eattime.slots.SlotFinder/FindAlternativeSlots',
                 request_serializer=slots__pb2.FindSlotsRequest.SerializeToString,
-                response_deserializer=slots__pb2.FindSlotsResponse.FromString,
+                response_deserializer=slots__pb2.Slot.FromString,
                 _registered_method=True)
 
 
@@ -56,10 +56,10 @@ class SlotFinderServicer(object):
 
 def add_SlotFinderServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'FindAlternativeSlots': grpc.unary_unary_rpc_method_handler(
+            'FindAlternativeSlots': grpc.unary_stream_rpc_method_handler(
                     servicer.FindAlternativeSlots,
                     request_deserializer=slots__pb2.FindSlotsRequest.FromString,
-                    response_serializer=slots__pb2.FindSlotsResponse.SerializeToString,
+                    response_serializer=slots__pb2.Slot.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -83,12 +83,12 @@ class SlotFinder(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(
+        return grpc.experimental.unary_stream(
             request,
             target,
             '/eattime.slots.SlotFinder/FindAlternativeSlots',
             slots__pb2.FindSlotsRequest.SerializeToString,
-            slots__pb2.FindSlotsResponse.FromString,
+            slots__pb2.Slot.FromString,
             options,
             channel_credentials,
             insecure,

@@ -38,6 +38,7 @@ def find_alternatives(
     guests: int,
 ):
     slots = get_alternatives_via_grpc(restaurant_id, start, end, guests)
+
     return {"count": len(slots), "slots": slots}
 
 

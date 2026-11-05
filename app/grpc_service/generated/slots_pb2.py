@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bslots.proto\x12\reattime.slots\"z\n\x10\x46indSlotsRequest\x12\x15\n\rrestaurant_id\x18\x01 \x01(\x03\x12\x15\n\rdesired_start\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65sired_end\x18\x03 \x01(\t\x12\x14\n\x0cguests_count\x18\x04 \x01(\x05\x12\r\n\x05limit\x18\x05 \x01(\x05\"v\n\x04Slot\x12\x10\n\x08place_id\x18\x01 \x01(\x03\x12\r\n\x05seats\x18\x02 \x01(\x05\x12\x10\n\x08location\x18\x03 \x01(\t\x12\x12\n\nstart_time\x18\x04 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x05 \x01(\t\x12\x15\n\rshift_minutes\x18\x06 \x01(\x05\"7\n\x11\x46indSlotsResponse\x12\"\n\x05slots\x18\x01 \x03(\x0b\x32\x13.eattime.slots.Slot2g\n\nSlotFinder\x12Y\n\x14\x46indAlternativeSlots\x12\x1f.eattime.slots.FindSlotsRequest\x1a .eattime.slots.FindSlotsResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bslots.proto\x12\reattime.slots\"k\n\x10\x46indSlotsRequest\x12\x15\n\rrestaurant_id\x18\x01 \x01(\x03\x12\x15\n\rdesired_start\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65sired_end\x18\x03 \x01(\t\x12\x14\n\x0cguests_count\x18\x04 \x01(\x05\"_\n\x04Slot\x12\x10\n\x08place_id\x18\x01 \x01(\x03\x12\r\n\x05seats\x18\x02 \x01(\x05\x12\x10\n\x08location\x18\x03 \x01(\t\x12\x12\n\nstart_time\x18\x04 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x05 \x01(\t\"7\n\x11\x46indSlotsResponse\x12\"\n\x05slots\x18\x01 \x03(\x0b\x32\x13.eattime.slots.Slot2\\\n\nSlotFinder\x12N\n\x14\x46indAlternativeSlots\x12\x1f.eattime.slots.FindSlotsRequest\x1a\x13.eattime.slots.Slot0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,11 +32,11 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'slots_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_FINDSLOTSREQUEST']._serialized_start=30
-  _globals['_FINDSLOTSREQUEST']._serialized_end=152
-  _globals['_SLOT']._serialized_start=154
-  _globals['_SLOT']._serialized_end=272
-  _globals['_FINDSLOTSRESPONSE']._serialized_start=274
-  _globals['_FINDSLOTSRESPONSE']._serialized_end=329
-  _globals['_SLOTFINDER']._serialized_start=331
-  _globals['_SLOTFINDER']._serialized_end=434
+  _globals['_FINDSLOTSREQUEST']._serialized_end=137
+  _globals['_SLOT']._serialized_start=139
+  _globals['_SLOT']._serialized_end=234
+  _globals['_FINDSLOTSRESPONSE']._serialized_start=236
+  _globals['_FINDSLOTSRESPONSE']._serialized_end=291
+  _globals['_SLOTFINDER']._serialized_start=293
+  _globals['_SLOTFINDER']._serialized_end=385
 # @@protoc_insertion_point(module_scope)
