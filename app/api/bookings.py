@@ -1,5 +1,6 @@
 # app/api/bookings.py
 # HTTP-роутер для бронирований
+from app.rabbit import publish_event
 from app.grpc_client.client import get_alternatives_via_grpc
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
@@ -14,12 +15,24 @@ router = APIRouter(prefix="/bookings", tags=["bookings"])
 
 
 @router.post("/", response_model=BookingRead, status_code=201)
-def create_booking(data: BookingCreate, service: BookingService = Depends(get_booking_service),
-    current_user: User = Depends(get_current_user),):
+async def create_booking(
+        data: BookingCreate,
+        service: BookingService = Depends(get_booking_service),
+        current_user: User = Depends(get_current_user),
+):
     try:
-        return service.create(current_user.id, data)
+        booking = service.create(current_user.id, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+    #  Отправляем событие в RabbitMQ
+    await publish_event(
+        "booking_created",
+        {"booking_id": booking.id, "user_id": current_user.id, "place_id": booking.place_id}
+    )
+
+    # Возвращаем созданную бронь
+    return booking
 
 
 @router.get("/", response_model=List[BookingRead])
