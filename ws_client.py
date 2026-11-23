@@ -2,7 +2,6 @@
 import asyncio
 import websockets
 
-
 async def listen():
     uri = "ws://localhost:8765"
     print(f"Подключение к {uri}...")

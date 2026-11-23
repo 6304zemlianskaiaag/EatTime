@@ -24,14 +24,10 @@ async def create_booking(
         booking = service.create(current_user.id, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-    #  Отправляем событие в RabbitMQ
     await publish_event(
         "booking_created",
         {"booking_id": booking.id, "user_id": current_user.id, "place_id": booking.place_id}
     )
-
-    # Возвращаем созданную бронь
     return booking
 
 
@@ -66,29 +62,42 @@ def list_restaurant_bookings(
 
 # Отмена брони текущим пользователем
 @router.post("/{booking_id}/cancel")
-def cancel_booking(
-    booking_id: int,
-    service: BookingService = Depends(get_booking_service),
-    current_user: User = Depends(get_current_user),
+async def cancel_booking(
+        booking_id: int,
+        service: BookingService = Depends(get_booking_service),
+        current_user: User = Depends(get_current_user),
 ):
     if not service.cancel(booking_id, current_user.id):
         raise HTTPException(status_code=400, detail="Не удалось отменить бронь")
+
+    await publish_event(
+        "booking_cancelled",
+        {"booking_id": booking_id, "user_id": current_user.id}
+    )
     return {"message": "Бронь отменена"}
 
 
 # Смена статуса (для админа)
 @router.patch("/{booking_id}/status", response_model=BookingRead)
-def update_status(
-    booking_id: int,
-    data: BookingStatusUpdate,
-    service: BookingService = Depends(get_booking_service),
+async def update_status(
+        booking_id: int,
+        data: BookingStatusUpdate,
+        service: BookingService = Depends(get_booking_service),
 ):
     try:
         booking = service.update_status(booking_id, data.status)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
     if booking is None:
         raise HTTPException(status_code=404, detail="Бронь не найдена")
+
+    event_name = f"booking_{data.status}"  #  booking_confirmed(подтвержд), rejected(откл), completed(заверш), cancelled(отменено)
+    await publish_event(
+        event_name,
+        {"booking_id": booking.id, "user_id": booking.user_id, "status": data.status}
+    )
+
     return booking
 
 
